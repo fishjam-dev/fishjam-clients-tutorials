@@ -16,7 +16,7 @@ import {
   useCamera,
 } from '@jellyfish-dev/react-native-client-sdk';
 
-const JELLYFISH_URL = 'ws://192.168.0.31:4000/socket/peer/websocket';
+const JELLYFISH_URL = 'ws://192.168.81.182:4000/socket/peer/websocket';
 
 function ConnectScreen({ navigation }): JSX.Element {
   const [peerToken, setPeerToken] = useState<string>('');
