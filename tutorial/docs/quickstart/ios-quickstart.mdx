@@ -28,12 +28,13 @@ You can check out the finished project [here](https://github.com/jellyfish-dev/j
 
 ### Add dependencies
 
-Jelllyfish Client for iOS is a Swift package, so you can add it simply in Xcode.
-Go to `File` -> `Add packages` and enter package github repo url (`https://github.com/jellyfish-dev/ios-client-sdk`):
+Jellyfish Client for iOS is a Swift package, so you can add it simply in Xcode.
+Go to `File` -> `Add packages` and enter the package Github repo URL
+(`https://github.com/jellyfish-dev/ios-client-sdk`):
 
 ![File -> Add packages](./img/add_package_ios_1.png)
 
-![Enter package url](./img/add_package_ios_2.png)
+![Enter package URL](./img/add_package_ios_2.png)
 
 ### Start the Jellyfish backend
 
@@ -45,11 +46,11 @@ Go to `File` -> `Add packages` and enter package github repo url (`https://githu
 
 ### App permissions
 
-In `Info.plist` file you have to set `NSCameraUsageDescription`. You can edit
+In the `Info.plist` file you have to set `NSCameraUsageDescription`. You can edit
 this file in Xcode. This value is a description that is shown when iOS asks the user
 for camera permission.
 
-We also suggest setting background mode to `audio` so that the app doesn't
+We also suggest setting the background mode to `audio` so that the app doesn't
 disconnect when it's in the background:
 
 ```xml title=Info.plist
@@ -61,20 +62,20 @@ disconnect when it's in the background:
 
 ## Connecting to the server and joining the room
 
-Our app will consist of two screens. The first one allows user to type, paste or
-scan the peer token and connect to the room. The second screen shows room
-participants with their video tracks.
+Our app will consist of two screens. The first one allows the user to type,
+paste or scan the peer token and connect to the room. The second screen shows
+room participants with their video tracks.
 
 ### App structure
 
 To write the app we'll use SwiftUI. Firstly, create a new iOS application
-project. You'll see a `ContentView.swift` file created for you. In this file
-we're going to put UI related code. On the other hand, the code responsible for
-the business logic of the app (storing data, managing state of the app,
+project. You'll see a `ContentView.swift` file created for you. In this file,
+we're going to put UI-related code. On the other hand, the code responsible for
+the business logic of the app (storing data, managing the state of the app,
 connecting to the server) will be put in `ContentViewController.swift`.
 
 We'll have also a small file for things related to styling. Feel free to skip this step and style
-your components however you want, we just put them there for completness.
+your components however you want, we just put them there for completeness.
 
 ```swift title=Theme.swift
 import SwiftUI
@@ -108,21 +109,22 @@ struct TextFieldStyle: ViewModifier {
 }
 ```
 
-Of course your app might be a lot more complicated and use a different
-structure. The two screens should be probably separated in different files, we
-should use some kind of navigation etc. For this tutorial though, this simple
+Of course, your app might be a lot more complicated and use a different
+structure. The two screens should be probably separated into different files, we
+should use some kind of navigation, etc. For this tutorial though, this simple
 structure should be enough.
 
 ### Connect screen
 
 The UI of the Connect screen consists of a simple text input and a few buttons.
-The flow for this screen is simple: user either copies the peer token from the
-dashboard or scans it with QR code scanner and presses Connect button. The QR
-code scanner is completely optional, but we'll show how to add it for convenience.
+The flow for this screen is simple: the user either copies the peer token from
+the dashboard or scans it with a QR code scanner and presses Connect button. The
+QR code scanner is completely optional, but we'll show how to add it for
+convenience.
 
 The code for the connect screen UI is straightforward:
 
-```swift title="ContentView.swift
+```swift title=ContentView.swift
 struct ConnectScreen: View {
   @State private var peerToken = ""
 
@@ -255,9 +257,9 @@ class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
 
 We won't go into details as it's not the main topic of this tutorial. The most
 important class here is `QRScanner`. We can use it in our UI, just like any
-SwiftUI component. As an argument it takes a callback that is called when the
+SwiftUI component. As an argument, it takes a callback that is called when the
 code is scanned. We'll put this component in a modal, which is shown after
-clicking `Scan QR code` button:
+clicking the `Scan QR code` button:
 
 ```swift title=ContentView.swift
 struct ConnectScreen: View {
@@ -294,8 +296,8 @@ Now if you scan the code, the peer token should appear in the text field.
 
 ### Connecting to the backend
 
-Time to write code to connect to the backend. It will be responsibility of the
-`ContentViewController`. Let's create the controller:
+Time to write code to connect to the backend. It will be the responsibility of
+the `ContentViewController`. Let's create the controller:
 
 ```swift title=ContentViewController.swift
 class ContentViewController: ObservableObject {
@@ -332,7 +334,7 @@ struct ConnectScreen: View {
 }
 ```
 
-Now to actually connect to the backend, create `JellyfishClient` instance and call `connect()` function:
+Now to connect to the backend, create a `JellyfishClient` instance and call the `connect()` function:
 
 ```swift title=ContentViewController.swift
 class ContentViewController: ObservableObject {
@@ -352,8 +354,8 @@ class ContentViewController: ObservableObject {
 }
 ```
 
-the `websocketUrl` is the url of Jellyfish backend, be sure to change it to your
-local backend. Also we strongly recommend storing it for example as an
+the `websocketUrl` is the URL of the Jellyfish backend, be sure to change it to your
+local backend. Also, we strongly recommend storing it for example as an
 environment variable.
 
 The `token` is the peer token provided by the user. It's used to determine the
@@ -391,23 +393,24 @@ class ContentViewController: ObservableObject, JellyfishClientListener {
 }
 ```
 
-In `setupTracks()` function we set up a local video track to stream. We use a
-preset with reasonable defaults, but there are many settings you can customize
-(resolution, bandwidth, simulcast etc.). The local video track streams the local
-device camera. You can also set up an audio track, but for the purposes of this
-tutorial we omitted it.
+In the `setupTracks()` function we set up a local video track to stream. We use
+a preset with reasonable defaults, but there are many settings you can customize
+(resolution, bandwidth, simulcast, etc.). The local video track streams the
+local device camera. You can also set up an audio track, but for this tutorial
+we omitted it.
 
-Then in `onAuthSuccess()` after setting up tracks we join the room. When user
-joins the room, the user is able to receive tracks from other peers and
+Then in the `onAuthSuccess()` after setting up tracks we join the room. When the
+user joins the room, the user can receive tracks from other peers and
 vice-versa.
 
-Don't forget to implement also `onAuthError()` function - it's called when the
+Don't forget to implement also the `onAuthError()` function - it's called when the
 authentication failed and you should handle it by for example informing the user
 that something went wrong.
 
-Backend informs us that user succesfully joined the room in `onJoined` callback.
-In `onJoined` callback we also receive information about other peers in the room
-and local user id. We're going to store information about peers in `ContentViewController`:
+The backend informs us that the user successfully joined the room in the
+`onJoined` callback. In the `onJoined` callback, we also receive information
+about other peers in the room and local user id. We're going to store
+information about peers in `MainViewModel`:
 
 ```swift title=ContentViewController.swift
 // highlight-start
@@ -446,24 +449,24 @@ class ContentViewController: ObservableObject, JellyfishClientListener {
 ```
 
 `Participant` is a simple class for storing data about participants - in this
-example it's just their id and track context.
+example, it's just their id and track context.
 
 `participants` and `isConnected` are state variables that are exposed to the UI
 (`ContentView`). `participants` stores current peers and updates when peers are
 added or removed.
 
-In `onJoined` callback we add participants that are currently in the room and
+In the `onJoined` callback, we add participants that are currently in the room and
 update the UI accordingly.
 
-Remember to also implement `onJoinError` callback, just like `onAuthError`.
+Remember to also implement the `onJoinError` callback, just like `onAuthError`.
 
-With this you should be able to connect to the server now. Scan the QR code and
-connect, and in the dashboard you should be able to see video from the camera
+With this, you should be able to connect to the server now. Scan the QR code and
+connect, and in the dashboard, you should be able to see video from the camera
 on your mobile device.
 
-## Room screen
+## Room Screen
 
-Now we need an UI to display other participants. Jellyfish Client provides a
+Now we need a UI to display other participants. Jellyfish Client provides a
 component for that: `SwiftUIVideoView`. We'll put it in a grid.
 
 :::info
@@ -510,7 +513,7 @@ example rotating frog) in the dashboard like this (do it before joining the room
 
 ![Adding new participant](./img/adding_new_track.gif)
 
-### Adding / removing peers and tracks
+### Adding/removing peers and tracks
 
 If you run the app, you'll see that nothing happens if a new participant joins
 the room while we're joined. We have to handle this by implementing some more
@@ -557,14 +560,14 @@ class ContentViewController: ObservableObject, JellyfishClientListener {
 ```
 
 Those methods are rather self-explanatory: `onPeerJoined()` is called when
-someone joins the room, `onPeerLeft()` is called when someone leaves the room.
+someone joins the room, and `onPeerLeft()` is called when someone leaves the room.
 Similarly, `onTrackReady()` is called when a track is ready to display and
 `onTrackRemoved()` is called when a track is no longer streamed.
 
 ### Gracefully leaving the room
 
-To leave a rooom we'll add a button for the user. When user clicks it, we
-gracefully leave the room, close the server connection and go back to the
+To leave a room we'll add a button for the user. When the user clicks it, we
+gracefully leave the room, close the server connection, and go back to the
 Connect screen.
 
 ```swift title=ContentView.swift
@@ -622,4 +625,4 @@ example](https://github.com/jellyfish-dev/react-native-membrane-webrtc/tree/mast
 
 ![Videoroom Demo](./img/videoroom.gif)
 
-It's in React Native, but actually React Native SDK uses iOS SDK under the hood!
+It's written in React Native, but React Native SDK uses iOS SDK under the hood!
