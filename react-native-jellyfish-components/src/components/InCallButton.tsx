@@ -1,7 +1,12 @@
-import {AdditionalColors, BrandColors} from './Colors';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+import { AdditionalColors, BrandColors } from './Colors';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
-import {StyleSheet, View, Pressable, GestureResponderEvent} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Pressable,
+  type GestureResponderEvent,
+} from 'react-native';
 
 const IconSize = 25;
 
@@ -29,7 +34,7 @@ type ButtonTypeName = 'primary' | 'disconnect';
 type InCallButtonProps = {
   type?: ButtonTypeName;
   onPress: (event: GestureResponderEvent) => void;
-  iconName: string;
+  iconName: keyof typeof MaterialCommunityIcons.glyphMap;
 };
 
 export const InCallButton = ({

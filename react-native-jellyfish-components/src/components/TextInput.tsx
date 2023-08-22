@@ -1,8 +1,8 @@
-import {AdditionalColors, BrandColors, TextColors} from './Colors';
-import {TextInputTextStyle, Typo} from './Typo';
-import {isEmpty} from 'lodash';
-import React, {useState} from 'react';
-import {StyleSheet, View, TextInput as RNTextInput} from 'react-native';
+import { AdditionalColors, BrandColors, TextColors } from './Colors';
+import { TextInputTextStyle, Typo } from './Typo';
+import { isEmpty } from 'lodash';
+import React, { useState } from 'react';
+import { StyleSheet, View, TextInput as RNTextInput } from 'react-native';
 
 const TextInputStyles = StyleSheet.create({
   main: {
@@ -101,7 +101,8 @@ export const TextInput = ({
         <View style={TextInputStyles.roomInputSubLabel}>
           <Typo
             variant="label"
-            color={editable ? TextColors.darkText : AdditionalColors.grey80}>
+            color={editable ? TextColors.darkText : AdditionalColors.grey80}
+          >
             {sublabel}
           </Typo>
         </View>
