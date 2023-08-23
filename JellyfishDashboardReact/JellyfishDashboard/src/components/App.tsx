@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { create } from "@jellyfish-dev/react-client-sdk/experimental";
 import VideoPlayer from "./VideoPlayer";
 import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
-import { JellyfishClient, Peer } from "@jellyfish-dev/ts-client-sdk";
+import { Peer } from "@jellyfish-dev/ts-client-sdk";
 import { SignalingUrl } from "@jellyfish-dev/react-client-sdk/.";
 
 // Example metadata types for peer and track
@@ -24,9 +24,9 @@ const JELLYFISH_URL = { protocol: "ws", host: "localhost:4002", path: "/socket/p
 const client = create<PeerMetadata, TrackMetadata>();
 
 export const App = () => {
-  // Create the connect function
   // Create a state to store the peer token used to connect to the room
   const [peerToken, setPeerToken] = useState<string>("");
+  // Create a state to store the connection status
   const [connected, setConnected] = useState<boolean>(false);
   const connect = client.useConnect();
   const disconnect = client.useDisconnect();
@@ -39,34 +39,33 @@ export const App = () => {
   // Get jellyfish client reference
   const jellyfishClient = client.useSelector((snapshot) => snapshot.connectivity.client);
 
+  async function startScreenSharing() {
+    // Check if webrtc is initialized
+    if (!webrtcApi) return console.error("webrtc is not initialized");
+
+    // Create a new MediaStream to add tracks to
+    const localStream: MediaStream = new MediaStream();
+
+    // Get screen sharing MediaStream
+    const screenStream = await navigator.mediaDevices.getDisplayMedia(SCREEN_SHARING_MEDIA_CONSTRAINTS);
+
+    // Add tracks from screen sharing MediaStream to local MediaStream
+    screenStream.getTracks().forEach((track) => localStream.addTrack(track));
+
+    // Add local MediaStream to webrtc
+    localStream.getTracks().forEach((track) => webrtcApi.addTrack(track, localStream, { type: "screen" }));
+  }
+
+  const onJoinSuccess = (peerId: string, peersInRoom: Peer[]) => {
+    console.log("join success");
+    console.log("peerId", peerId);
+    console.log("peersInRoom", peersInRoom);
+
+    // To start broadcasting your media you will need source of MediaStream like camera, microphone or screen
+    // In this example we will use screen sharing
+  };
+
   useEffect(() => {
-    async function startScreenSharing() {
-      // Check if webrtc is initialized
-      if (!webrtcApi) return console.error("webrtc is not initialized");
-
-      // Create a new MediaStream to add tracks to
-      const localStream: MediaStream = new MediaStream();
-
-      // Get screen sharing MediaStream
-      const screenStream = await navigator.mediaDevices.getDisplayMedia(SCREEN_SHARING_MEDIA_CONSTRAINTS);
-
-      // Add tracks from screen sharing MediaStream to local MediaStream
-      screenStream.getTracks().forEach((track) => localStream.addTrack(track));
-
-      // Add local MediaStream to webrtc
-      localStream.getTracks().forEach((track) => webrtcApi.addTrack(track, localStream, { type: "screen" }));
-    }
-
-    const onJoinSuccess = (peerId: string, peersInRoom: Peer[]) => {
-      console.log("join success");
-      console.log("peerId", peerId);
-      console.log("peersInRoom", peersInRoom);
-
-      // To start broadcasting your media you will need source of MediaStream like camera, microphone or screen
-      // In this example we will use screen sharing
-      startScreenSharing();
-    };
-
     // You can listen to events emitted by the client
     jellyfishClient?.on("joined", onJoinSuccess);
 
@@ -74,32 +73,33 @@ export const App = () => {
       // Remove the event listener when the component unmounts
       jellyfishClient?.off("joined", onJoinSuccess);
     };
-  }, [jellyfishClient, webrtcApi]);
+  }, [jellyfishClient]);
 
-  // Render the remote tracks from other peers
   return (
     <>
       <div>
-        <input
-          type="text"
-          value={peerToken}
-          onChange={(e) => setPeerToken(e.target.value)}
-          placeholder="Enter peer token"
-        />
         {!connected ? (
-          <button
-            disabled={peerToken === ""}
-            onClick={() => {
-              connect({
-                peerMetadata: { name: "test" },
-                token: peerToken,
-                signaling: JELLYFISH_URL,
-              });
-              setConnected(true);
-            }}
-          >
-            Connect
-          </button>
+          <>
+            <input
+              type="text"
+              value={peerToken}
+              onChange={(e) => setPeerToken(e.target.value)}
+              placeholder="Enter peer token"
+            />
+            <button
+              disabled={peerToken === ""}
+              onClick={() => {
+                connect({
+                  peerMetadata: { name: "test" },
+                  token: peerToken,
+                  signaling: JELLYFISH_URL,
+                });
+                setConnected(true);
+              }}
+            >
+              Connect
+            </button>
+          </>
         ) : (
           <button
             onClick={() => {
@@ -111,7 +111,12 @@ export const App = () => {
           </button>
         )}
       </div>
-
+      {connected && (
+        <div>
+          <button onClick={startScreenSharing}>Start screen sharing</button>
+        </div>
+      )}
+      {/* Render the remote tracks from other peers*/}
       <div className="flex flex-col">
         {remoteTracks.map(({ tracks }) => {
           return Object.values(tracks || {}).map(({ stream, trackId }) => (
