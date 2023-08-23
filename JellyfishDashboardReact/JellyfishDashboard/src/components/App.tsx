@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { create } from "@jellyfish-dev/react-client-sdk/experimental";
 import VideoPlayer from "./VideoPlayer";
 import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
-import { Peer } from "@jellyfish-dev/ts-client-sdk";
-import { SignalingUrl } from "@jellyfish-dev/react-client-sdk/.";
+import { SignalingUrl, Peer } from "@jellyfish-dev/react-client-sdk/.";
 
 // Example metadata types for peer and track
 // You can define your own metadata types just make sure they are serializable
