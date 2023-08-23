@@ -1,6 +1,12 @@
-import {TextColors} from './Colors';
-import React, {ReactNode} from 'react';
-import {StyleSheet, Text, Dimensions, TextStyle, TextProps} from 'react-native';
+import { TextColors } from './Colors';
+import React, { type ReactNode } from 'react';
+import {
+  StyleSheet,
+  Text,
+  Dimensions,
+  type TextStyle,
+  type TextProps,
+} from 'react-native';
 import {
   useFonts,
   NotoSans_400Regular,
@@ -201,24 +207,24 @@ export const Typo = ({
     const TextStylesDynamic =
       windowWidth > SMALL_WINDOW_BREAKPOINT ? TextStyles : TextStylesSmall;
 
-    const variantMap: {[key: string]: TextStyle} = {
-      h1: HeadlineStylesDynamic.h1,
-      h2: HeadlineStylesDynamic.h2,
-      h3: HeadlineStylesDynamic.h3,
-      h4: HeadlineStylesDynamic.h4,
-      h5: HeadlineStylesDynamic.h5,
+    const variantMap: { [key: string]: TextStyle } = {
+      'h1': HeadlineStylesDynamic.h1,
+      'h2': HeadlineStylesDynamic.h2,
+      'h3': HeadlineStylesDynamic.h3,
+      'h4': HeadlineStylesDynamic.h4,
+      'h5': HeadlineStylesDynamic.h5,
       'body-big': TextStylesDynamic.bodyBig,
       'body-small': TextStylesDynamic.bodySmall,
-      label: TextStylesDynamic.label,
-      caption: TextStylesDynamic.caption,
-      button: TextStylesDynamic.button,
+      'label': TextStylesDynamic.label,
+      'caption': TextStylesDynamic.caption,
+      'button': TextStylesDynamic.button,
       'video-label': TextStylesCustom.videoLabel,
       'chat-regular': TextStylesCustom.chatRegular,
       'chat-semibold': TextStylesCustom.chatSemibold,
       'chat-title': TextStylesCustom.chatTitle,
     };
 
-    return [{color: textColor} as TextStyle, variantMap[variant]];
+    return [{ color: textColor } as TextStyle, variantMap[variant]];
   };
 
   return (

@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import {StyleSheet, Modal, View} from 'react-native';
-import {Button} from './Button';
-import {BarCodeScanner} from 'expo-barcode-scanner';
+import React, { useState } from 'react';
+import { Modal, View } from 'react-native';
+import { Button } from './Button';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 type Props = {
   onCodeScanned: (code: string) => void;
 };
 
-export function QRCodeScanner({onCodeScanned}: Props) {
+export function QRCodeScanner({ onCodeScanned }: Props) {
   const [isBarcodeScannerVisible, setIsBarcodeScannerVisible] = useState(false);
 
   const onPress = async () => {
@@ -15,13 +15,13 @@ export function QRCodeScanner({onCodeScanned}: Props) {
       setIsBarcodeScannerVisible(false);
       return;
     }
-    const {status} = await BarCodeScanner.requestPermissionsAsync();
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === 'granted') {
       setIsBarcodeScannerVisible(true);
     }
   };
 
-  const onBarCodeScanned = ({data}) => {
+  const onBarCodeScanned = ({ data }: { data: string }) => {
     onCodeScanned(data);
     setIsBarcodeScannerVisible(false);
   };
@@ -32,7 +32,8 @@ export function QRCodeScanner({onCodeScanned}: Props) {
         visible={isBarcodeScannerVisible}
         onRequestClose={() => setIsBarcodeScannerVisible(false)}
         animationType="slide"
-        transparent>
+        transparent
+      >
         <View
           style={{
             backgroundColor: 'white',
@@ -40,10 +41,11 @@ export function QRCodeScanner({onCodeScanned}: Props) {
             borderRadius: 8,
             flex: 1,
             margin: 8,
-          }}>
+          }}
+        >
           <BarCodeScanner
             onBarCodeScanned={onBarCodeScanned}
-            style={{flex: 1, padding: 8, borderRadius: 8}}
+            style={{ flex: 1, padding: 8, borderRadius: 8 }}
           />
         </View>
       </Modal>
@@ -51,9 +53,3 @@ export function QRCodeScanner({onCodeScanned}: Props) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  fill: {
-    flex: 1,
-  },
-});
