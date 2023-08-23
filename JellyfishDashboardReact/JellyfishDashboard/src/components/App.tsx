@@ -7,11 +7,11 @@ import { SignalingUrl } from "@jellyfish-dev/react-client-sdk/.";
 
 // Example metadata types for peer and track
 // You can define your own metadata types just make sure they are serializable
-type PeerMetadata = {
+export type PeerMetadata = {
   name: string;
 };
 
-type TrackMetadata = {
+export type TrackMetadata = {
   type: "camera" | "screen";
 };
 
@@ -29,6 +29,7 @@ export const App = () => {
   const [peerToken, setPeerToken] = useState<string>("");
   const [connected, setConnected] = useState<boolean>(false);
   const connect = client.useConnect();
+  const disconnect = client.useDisconnect();
   // Get the full state
   const remoteTracks = client.useSelector((snapshot) => Object.values(snapshot?.remote || {}));
 
@@ -78,31 +79,46 @@ export const App = () => {
   // Render the remote tracks from other peers
   return (
     <>
-      {!connected ? (
-        <div className="flex flex-col">
-          <input type="text" onChange={(e) => setPeerToken(e.target.value)} />
+      <div>
+        <input
+          type="text"
+          value={peerToken}
+          onChange={(e) => setPeerToken(e.target.value)}
+          placeholder="Enter peer token"
+        />
+        {!connected ? (
           <button
+            disabled={peerToken === ""}
             onClick={() => {
-              setConnected(true);
               connect({
-                peerMetadata: { name: "peer" },
+                peerMetadata: { name: "test" },
                 token: peerToken,
                 signaling: JELLYFISH_URL,
               });
+              setConnected(true);
             }}
           >
-            Join
+            Connect
           </button>
-        </div>
-      ) : (
-        <div className="flex flex-col">
-          {remoteTracks.map(({ tracks }) => {
-            return Object.values(tracks || {}).map(({ stream, trackId }) => (
-              <VideoPlayer key={trackId} stream={stream} /> // Simple component to render a video element
-            ));
-          })}
-        </div>
-      )}
+        ) : (
+          <button
+            onClick={() => {
+              disconnect();
+              setConnected(false);
+            }}
+          >
+            Disconnect
+          </button>
+        )}
+      </div>
+
+      <div className="flex flex-col">
+        {remoteTracks.map(({ tracks }) => {
+          return Object.values(tracks || {}).map(({ stream, trackId }) => (
+            <VideoPlayer key={trackId} stream={stream} /> // Simple component to render a video element
+          ));
+        })}
+      </div>
     </>
   );
 };

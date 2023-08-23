@@ -12,7 +12,14 @@ const VideoPlayer = ({ stream }: Props) => {
     videoRef.current.srcObject = stream || null;
   }, [stream]);
 
-  return <video autoPlay playsInline muted ref={videoRef} />;
+  return (
+    <div className="card card-compact w-96 bg-base-100 shadow-xl">
+      <video autoPlay playsInline muted ref={videoRef} />
+      <div className="card-body">
+        <div className="card-actions justify-end"></div>
+      </div>
+    </div>
+  );
 };
 
 export default VideoPlayer;

@@ -1,0 +1,148 @@
+import JellyfishArchitecture from "./jellyfish-architecture.mdx";
+import StartingJellyfishBackend from "./starting-jellyfish-backend.mdx";
+import StartingJellyfishDashboard from "./starting-dashboard.mdx";
+
+# Android Quickstart Guide
+
+## What you'll learn
+
+This tutorial will guide you through creating your first Android project which
+uses Jellyfish client. By the end of the tutorial, you'll have a working
+application that connects to the front-end dashboard using WebRTC technology and
+streams and receives camera tracks.
+
+You can check out the final project [here]().
+
+## What do you need
+
+- a little bit of experience in creating React apps
+- IDE of your choice (for example [Visual Studio Code](https://code.visualstudio.com/))
+- [Node.js](https://nodejs.org/en/) installed on your machine
+
+## Jellyfish architecture
+
+<JellyfishArchitecture />
+
+## Setup
+
+### Create React / Vite project
+
+Firstly create a brand new project.
+
+<Tabs>
+  <TabItem value="react" label="React">
+
+```bash
+npx create-react-app my-react-app --template typescript
+```
+
+  </TabItem>
+  <TabItem value="vite" label="Vite">
+
+```bash
+npm create vite@latest my-react-app -- --template react-ts
+```
+
+  </TabItem>
+</Tabs>
+
+### Add dependencies
+
+<Tabs>
+
+  <TabItem value="react-native" label="React Native">
+    In order for this module to work you'll need to add our `react-client-sdk` package. This
+    is necessary to create and connect Jellyfish Client.
+
+```bash npm2yarn
+npm install @jellyfish-dev/react-client-sdk
+```
+
+  </TabItem>
+</Tabs>
+
+### Start the Jellyfish backend
+
+<StartingJellyfishBackend />
+
+### Start the dashboard web front-end
+
+<StartingJellyfishDashboard />
+
+## (Optional) Add CSS libraries
+
+If you want to add some CSS libraries to your project, you can do it now. For
+example, you can add [Tailwind CSS](https://tailwindcss.com/) and [DaisyUI](https://daisyui.com/).
+
+```bash npm2yarn
+npm install tailwindcss daisyui@latest
+```
+
+## General project structure
+
+Our app will consist of two parts:
+
+- a component which will connect to the server and join the room
+
+- a component which will display the video tracks and allow to send our own
+  track
+
+## Create a Membrane Client instance in your app
+
+In order to connect to the Jellyfish backend, we need to create a Membrane Client
+instance. We can do it by using the `create` function from the
+`@jellyfish-dev/react-client-sdk` package. It needs two generic parameters:
+
+- `PeerMetadata` - type of the metadata that will be sent to the server when
+  connecting to the room (for example, user name) it has to be serializable
+
+- `TrackMetadata` - type of the metadata that will be sent to the server when
+  sending a track (for example, track name) it has to be serializable aswell
+
+```tsx
+import React, { useEffect, useState } from "react";
+import { create } from "@jellyfish-dev/react-client-sdk/experimental";
+
+// Example metadata types for peer and track
+// You can define your own metadata types just make sure they are serializable
+type PeerMetadata = {
+  name: string;
+};
+
+type TrackMetadata = {
+  type: "camera" | "screen";
+};
+
+// Create a Membrane client instance
+const client = create<PeerMetadata, TrackMetadata>();
+
+export const App = () => {};
+```
+
+## Create a component which will connect to the server and join the room
+
+The UI of the component will be very simple. It will consist of a simple text imput field
+that will allow us to enter the room name and a button which
+will connect to the server and join the room.
+
+![Join room component](.img/join-room-component.png)
+
+```tsx
+<div>
+  {!connected ? (
+    <button
+      onClick={() =>
+        connect({
+          peerMetadata: { name: "test" },
+          token: peerToken,
+          signaling: JELLYFISH_URL,
+        })
+      }
+    >
+      Connect
+    </button>
+  ) : (
+    <button onClick={() => disconnect()}>Disconnect</button>
+  )}
+</div>
+```
