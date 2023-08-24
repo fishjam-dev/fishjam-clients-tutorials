@@ -50,8 +50,8 @@ npm create vite@latest my-react-app -- --template react-ts
 
 <Tabs>
 
-  <TabItem value="react-native" label="React">
-    In order for this module to work you'll need to add our `react-client-sdk` package. This
+  <TabItem value="react" label="React">
+    In order for this module to work you'll need to add our `react-client-sdk` and `browser-media-utils` packages This
     is necessary to create and connect Jellyfish Client.
 
 ```bash npm2yarn
@@ -78,6 +78,15 @@ example, you can add [Tailwind CSS](https://tailwindcss.com/) and [DaisyUI](http
 npm install tailwindcss daisyui@latest
 ```
 
+And add daisyUI to the tailwind.config.js
+
+```js title="tailwind.config.js"
+module.exports = {
+  //...
+  plugins: [require("daisyui")],
+} 
+```
+
 ## General project structure
 
 Our app will consist of two parts:
@@ -99,7 +108,7 @@ instance. We can do it by using the `create` function from the
 - `TrackMetadata` - type of the metadata that will be sent to the server when
   sending a track (for example, track name) it has to be serializable aswell
 
-```tsx
+```tsx title="App.tsx"
 import React from "react";
 import { create } from "@jellyfish-dev/react-client-sdk/experimental";
 
@@ -127,7 +136,7 @@ will connect to the server and join the room.
 We need also to create a state which will store the peer token used to connect to the room
 and a state which will store the connection status.
 
-```tsx
+```tsx title="App.tsx"
 //...
 export const App = () => {
   // Create a state to store the connection status
@@ -150,7 +159,7 @@ export const App = () => {
 
 ### Once the UI is ready, we need to implement the logic
 
-```tsx
+```tsx title="App.tsx"
 import { SignalingUrl } from "@jellyfish-dev/react-client-sdk/.";
 //...
 // This is the address of the Jellyfish backend. Change the local IP to yours. We
@@ -212,7 +221,9 @@ export const App = () => {
 
 ### We need a hook that will set up and send your screen track
 
-```tsx
+This hook uses [Navigator.mediaDevices] (https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mediaDevices) take a look how it works 
+
+```tsx title="App.tsx"
 import React, { useEffect, useState } from "react";
 import { create } from "@jellyfish-dev/react-client-sdk/experimental";
 import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
@@ -275,11 +286,17 @@ export const App = () => {
 };
 ```
 
+You should now see your screen recieced to each connected client on the dashboard. You can add another participant to check this out! 
+
+The streaming part of the app is ready! 
+
 ## What about the recieving part?
 
-### This is where the second component comes in
+### This is where the second component comes in handy
 
-For each track recieved we will create a new video element and add it to the DOM.
+For each track recieved we will create a new video element and display it on the screen. For clarity, we will separate this component to another file:
+
+Create in your directory file `VideoPlayer.tsx`
 
 ```tsx title="VideoPlayer.tsx"
 type Props = {
@@ -302,7 +319,7 @@ export default VideoPlayer;
 
 ### Now the logic and one more hook
 
-```tsx
+```tsx title="VideoPlayer.tsx"
 type Props = {
   stream: MediaStream | null | undefined;
 };
@@ -327,6 +344,8 @@ const VideoPlayer = ({ stream }: Props) => {
 
 export default VideoPlayer;
 ```
+
+You should see all the tracks sent from dashboard directly on your page, to test it, add new client and add them a track (for example a rotating frog). It will show up in your app automatically:
 
 ## Summary
 
