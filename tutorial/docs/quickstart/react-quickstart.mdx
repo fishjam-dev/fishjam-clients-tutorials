@@ -115,6 +115,8 @@ module.exports = {
 };
 ```
 
+You can also use our CSS Style Sheet for this project, available [here]
+
 ## General project structure
 
 Our app will consist of two parts:
@@ -349,11 +351,8 @@ type Props = {
 
 const VideoPlayer = ({ stream }: Props) => {
   return (
-    STYLEEEEEEE
-    <div className="card card-compact w-96 bg-base-100 shadow-xl">
+    <div>
       <video autoPlay playsInline muted ref={/* place for track ref*/} />
-      <div className="card-body">
-        <div className="card-actions justify-end"></div>
       </div>
     </div>
   );
