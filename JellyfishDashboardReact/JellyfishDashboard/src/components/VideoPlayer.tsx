@@ -13,13 +13,11 @@ const VideoPlayer = ({ stream }: Props) => {
   }, [stream]);
 
   return (
-    <div className=" w-96 h-64 shadow-xl">
+    <div className="video-container">
       <video autoPlay playsInline muted ref={videoRef} />
-      <div className="card-body">
-        <div className="card-actions justify-end"></div>
-      </div>
     </div>
   );
 };
+<video />;
 
 export default VideoPlayer;
