@@ -11,7 +11,9 @@ uses Jellyfish client. By the end of the tutorial, you'll have a working web
 application that connects to the front-end dashboard using WebRTC technology,
 streams your screen and receives video tracks.
 
-You can check out the final project [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ).
+![Finished app](./img/react-finished.gif)
+
+You can check out the finished project [here](https://github.com/jellyfish-dev/jellyfish-clients-tutorials/tree/main/JellyfishDashboardReact/JellyfishDashboard)
 
 ## What do you need
 
@@ -69,10 +71,10 @@ example, you can add [Tailwind CSS](https://tailwindcss.com/) and [DaisyUI](http
 
 ```bash npm2yarn
 npm install tailwindcss daisyui@latest
-npx tailwindcss init -p
+npx tailwindcss init
 ```
 
-Then add the following to your index.css file:
+Then rename your index.css file to daisyui.css and add configs:
 
 ```css title="daisyui.css"
 @tailwind base;
@@ -106,16 +108,20 @@ Import the CSS file in your main.tsx file:
 import "./daisyui.css";
 ```
 
-And add daisyUI to the tailwind.config.js:
+Finally, add daisyUI to the tailwind.config.js:
 
 ```js title="tailwind.config.js"
 module.exports = {
-  //...
+  content: ["./src/**/*.{html,js}"],
+  theme: {
+    extend: {},
+  },
   plugins: [require("daisyui")],
 };
 ```
 
-You can also use our CSS Style Sheet for this project, available [here]
+You can also use our CSS Style Sheet for this project, available
+[here](https://github.com/Crackhoff/jellyfish-clients-tutorials/blob/main/JellyfishDashboardReact/JellyfishDashboard/src/styles.css)
 
 ## General project structure
 
