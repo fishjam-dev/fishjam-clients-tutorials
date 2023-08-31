@@ -46,11 +46,11 @@ npm create vite@latest my-react-app -- --template react-ts
 <Tabs>
 
   <TabItem value="react" label="React">
-    In order for this module to work you'll need to add our `react-client-sdk` and `browser-media-utils` packages This
+    In order for this module to work you'll need to add our `react-client-sdk` package. This
     is necessary to create and connect Jellyfish Client.
 
 ```bash npm2yarn
-npm install https://github.com/jellyfish-dev/react-client-sdk @jellyfish-dev/browser-media-utils
+npm install https://github.com/jellyfish-dev/react-client-sdk
 ```
 
   </TabItem>
@@ -64,64 +64,10 @@ npm install https://github.com/jellyfish-dev/react-client-sdk @jellyfish-dev/bro
 
 <StartingJellyfishDashboard />
 
-## (Optional) Add CSS libraries
+## (Optional) Add a bit of CSS styling
 
-If you want to add some CSS libraries to your project, you can do it now. For
-example, you can add [Tailwind CSS](https://tailwindcss.com/) and [DaisyUI](https://daisyui.com/).
-
-```bash npm2yarn
-npm install tailwindcss daisyui@latest
-npx tailwindcss init
-```
-
-Then rename your index.css file to daisyui.css and add configs:
-
-```css title="daisyui.css"
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer components {
-  .mockup-code pre:before {
-    @apply hidden;
-  }
-
-  .mockup-code:before {
-    @apply hidden;
-  }
-
-  .mockup-code pre {
-    @apply pl-5;
-  }
-}
-
-@layer utilities {
-  .w-full-no-scrollbar {
-    width: calc(100vw - (100vw - 100%));
-  }
-}
-```
-
-Import the CSS file in your main.tsx file:
-
-```tsx title="main.tsx"
-import "./daisyui.css";
-```
-
-Finally, add daisyUI to the tailwind.config.js:
-
-```js title="tailwind.config.js"
-module.exports = {
-  content: ["./src/**/*.{html,js}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [require("daisyui")],
-};
-```
-
-You can also use our CSS Style Sheet for this project, available
-[here](https://github.com/Crackhoff/jellyfish-clients-tutorials/blob/main/JellyfishDashboardReact/JellyfishDashboard/src/styles.css)
+For this project, we prepared simple [CSS classes](https://github.com/Crackhoff/jellyfish-clients-tutorials/blob/main/JellyfishDashboardReact/JellyfishDashboard/src/styles.css),
+you are free to use it or create your own.
 
 ## General project structure
 
@@ -145,7 +91,7 @@ instance. We can do it by using the `create` function from the
 
 ```tsx title="App.tsx"
 import React from "react";
-import { create } from "@jellyfish-dev/react-client-sdk/experimental";
+import { create } from "@jellyfish-dev/react-client-sdk";
 
 // Example metadata types for peer and track
 // You can define your own metadata types just make sure they are serializable
@@ -298,7 +244,7 @@ This hook uses [Navigator.mediaDevices](https://developer.mozilla.org/en-US/docs
 
 ```tsx title="App.tsx"
 import React, { useEffect, useState } from "react";
-import { create } from "@jellyfish-dev/react-client-sdk/experimental";
+import { create } from "@jellyfish-dev/react-client-sdk";
 import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
 import { SignalingUrl, Peer } from "@jellyfish-dev/react-client-sdk/.";
 //...
@@ -323,7 +269,7 @@ export const App = () => {
               screenStream.getTracks().forEach((track) => webrtcApi.addTrack(track, screenStream, { type: "screen" }));
     };
    };
-   return ()
+   return (
   //...
   <button
     disabled={status !== "joined"}
@@ -335,6 +281,7 @@ export const App = () => {
   </button>
   <span>Status: {status}</span>
   //...
+  )
 };
 ```
 
@@ -356,12 +303,7 @@ type Props = {
 };
 
 const VideoPlayer = ({ stream }: Props) => {
-  return (
-    <div>
-      <video autoPlay playsInline muted ref={/* place for track ref*/} />
-      </div>
-    </div>
-  );
+  return <video autoPlay playsInline muted ref={/* place for track ref*/} />;
 };
 
 export default VideoPlayer;
@@ -396,7 +338,7 @@ export default VideoPlayer;
 
 ```tsx title="App.tsx"
 import React, { useEffect, useState } from "react";
-import { create } from "@jellyfish-dev/react-client-sdk/experimental";
+import { create } from "@jellyfish-dev/react-client-sdk";
 import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
 import { SignalingUrl, Peer } from "@jellyfish-dev/react-client-sdk/.";
 import VideoPlayer from "./VideoPlayer";
