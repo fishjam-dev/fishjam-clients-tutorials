@@ -199,12 +199,14 @@ export const App = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
       <input
+        className="input-field"
         value={token}
         onChange={(e) => setToken(() => e?.target?.value)}
         placeholder="token"
       />
       <div style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
         <button
+          className="button"
           disabled={token === "" || status === "joined"} // simple check to avoid errors
           onClick={() => {
             // highlight-start
@@ -219,6 +221,7 @@ export const App = () => {
           Connect
         </button>
         <button
+          className="button"
           disabled={status !== "joined"}
           onClick={() => {
             // highlight-next-line
@@ -228,7 +231,7 @@ export const App = () => {
           Disconnect
         </button>
         // highlight-next-line
-        <span>Status: {status}</span>
+        <span className="span-status">Status: {status}</span>
       </div>
     </div>
   );
@@ -244,8 +247,7 @@ This hook uses [Navigator.mediaDevices](https://developer.mozilla.org/en-US/docs
 
 ```tsx title="App.tsx"
 import React, { useEffect, useState } from "react";
-import { create } from "@jellyfish-dev/react-client-sdk";
-import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
+import { create, SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/react-client-sdk";
 import { SignalingUrl, Peer } from "@jellyfish-dev/react-client-sdk/.";
 //...
 export const {
@@ -272,6 +274,7 @@ export const App = () => {
    return (
   //...
   <button
+  className="button"
     disabled={status !== "joined"}
     onClick={() => {
       startScreenSharing();
@@ -303,7 +306,11 @@ type Props = {
 };
 
 const VideoPlayer = ({ stream }: Props) => {
-  return <video autoPlay playsInline muted ref={/* place for track ref*/} />;
+  return (
+    <div className="video-container">
+      <video autoPlay playsInline muted ref={/* place for track ref*/} />
+    </div>
+  );
 };
 
 export default VideoPlayer;
@@ -338,8 +345,7 @@ export default VideoPlayer;
 
 ```tsx title="App.tsx"
 import React, { useEffect, useState } from "react";
-import { create } from "@jellyfish-dev/react-client-sdk";
-import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
+import { create, SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/react-client-sdk";
 import { SignalingUrl, Peer } from "@jellyfish-dev/react-client-sdk/.";
 import VideoPlayer from "./VideoPlayer";
 //...
@@ -356,9 +362,19 @@ export const {
 export const App = () => {
   const tracks = useTracks();
   //...
+  <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center", // To align items in the center
+          gap: "20px",
+        }}
+      >
   {Object.values(tracks).map(({ stream, trackId }) => (
         <VideoPlayer key={trackId} stream={stream} /> // pass the stream to the component
       ))}
+  </div>
+  //...
   )
 ```
 

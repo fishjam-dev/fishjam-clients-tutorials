@@ -1,6 +1,5 @@
 import VideoPlayer from "./VideoPlayer";
-import { create } from "@jellyfish-dev/react-client-sdk";
-import { SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/browser-media-utils";
+import { create, SCREEN_SHARING_MEDIA_CONSTRAINTS } from "@jellyfish-dev/react-client-sdk";
 import { useState } from "react";
 
 // Example metadata types for peer and track
