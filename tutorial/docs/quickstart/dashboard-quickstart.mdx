@@ -115,6 +115,13 @@ You can see them after clicking the **Show Server Events** button.
 The dashboard allows adding HLS and RTSP streams in the room. You can set up the streams and see them in the room. It will look like this:
 ![HLS and RTSP](./img/dashboard_hls_rtsp.png)
 
+## Loadbalancing in Dashboard
+
+Jellyfish Server supports loadbalancing. It means that you can run multiple instances of the server and use them simultanoesly to minimise the load on each of them.
+The dashboard reflects this feature. Provided you run multiple-in-one Jellyfish instance (docker does that by default),
+connect one server to the dashboard. When the room you created was moved to another server, the dashboard will open this server for you.
+When server will open a room in the different instance, the dashboard will automatically connect to it and show the room.
+
 ## Summary
 
 Congrats on finishing the tutorial! You should now be able to use the dashboard to its full potential.
