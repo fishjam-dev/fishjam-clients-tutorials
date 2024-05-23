@@ -64,10 +64,10 @@ body {
 
 .span-status {
   display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
   font-size: 1.25rem;
-    height: fit-content;
-    padding: 0.5rem 1rem; /* Match these values with your button padding */
+  height: fit-content;
+  padding: 0.5rem 1rem; /* Match these values with your button padding */
 }
